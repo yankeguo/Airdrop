@@ -23,7 +23,7 @@ onMounted(async () => {
     >
       <span>claim your</span>
       <img src="~/assets/token-icon.svg" class="w-8 ms-2 me-1" />
-      <span class="text-lime-400">YGTOG</span><span class="ms-2">drop</span>
+      <span class="text-lime-400">YGTOG</span><span class="ms-2">air drop</span>
     </div>
     <div
       class="flex flex-row justify-start items-center font-semibold text-lg lg:text-xl mt-6"
