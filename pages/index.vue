@@ -1,19 +1,55 @@
 <script setup lang="ts">
-const walletStatus = ref(0);
+import { ethers } from "ethers";
 
-const checkWalletStatus = () => {
-  return (
-    typeof window !== "undefined" && "ethereum" in window && "ethers" in window
-  );
+const GNOSIS_MAINNET_PARAMS = {
+  chainId: "0x64",
+  chainName: "Gnosis",
+  nativeCurrency: {
+    name: "XDAI",
+    symbol: "XDAI",
+    decimals: 18,
+  },
+  rpcUrls: ["https://rpc.gnosischain.com/"],
+  blockExplorerUrls: ["https://gnosisscan.io/"],
 };
 
+declare global {
+  interface Window {
+    ethereum: any;
+    walletProvider: ethers.BrowserProvider;
+  }
+}
+
+enum WALLET_STATUS {
+  LOADING = "loading",
+  OK = "ok",
+  NOT_FOUND = "not_found",
+}
+
+const walletStatus = ref(WALLET_STATUS.LOADING);
+const address = ref("");
+
 onMounted(async () => {
-  if (!checkWalletStatus()) {
-    walletStatus.value = -1;
+  walletStatus.value =
+    typeof window !== "undefined" && window.ethereum
+      ? WALLET_STATUS.OK
+      : WALLET_STATUS.NOT_FOUND;
+
+  if (walletStatus.value === WALLET_STATUS.NOT_FOUND) {
     return;
   }
-  walletStatus.value = 1;
+
+  window.walletProvider = new ethers.BrowserProvider(window.ethereum);
 });
+
+async function connectWallet() {
+  await window.ethereum.request({
+    method: "wallet_addEthereumChain",
+    params: [GNOSIS_MAINNET_PARAMS],
+  });
+  const signer = await window.walletProvider.getSigner();
+  address.value = await signer.getAddress();
+}
 </script>
 
 <template>
@@ -23,7 +59,7 @@ onMounted(async () => {
     >
       <span>claim your</span>
       <img src="~/assets/token-icon.svg" class="w-8 ms-2 me-1" />
-      <span class="text-lime-400">YGTOG</span><span class="ms-2">air drop</span>
+      <span class="text-lime-400">YGTOG</span><span class="ms-2">airdrop</span>
     </div>
     <div
       class="flex flex-row justify-start items-center font-semibold text-lg lg:text-xl mt-6"
@@ -34,10 +70,10 @@ onMounted(async () => {
       <div
         class="flex flex-row justify-start items-center text-lg lg:text-xl mt-4 ms-4"
       >
-        <template v-if="walletStatus === 0">
+        <template v-if="walletStatus === WALLET_STATUS.LOADING">
           <span>loading...</span>
         </template>
-        <template v-if="walletStatus === -1">
+        <template v-if="walletStatus === WALLET_STATUS.NOT_FOUND">
           <span class="text-red-400"
             >wallet not found, please install one.</span
           >
@@ -53,6 +89,14 @@ onMounted(async () => {
               <UIcon name="i-heroicons-arrow-right-20-solid" class="w-5 h-5" />
             </template>
           </UButton>
+        </template>
+        <template v-if="walletStatus === WALLET_STATUS.OK">
+          <UButton
+            variant="outline"
+            label="connect wallet"
+            @click="connectWallet"
+          ></UButton>
+          <span>{{ address }}</span>
         </template>
       </div>
     </ClientOnly>
