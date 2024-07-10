@@ -17,6 +17,9 @@ importers:
       vue:
         specifier: latest
         version: 3.4.31
+      vue-router:
+        specifier: ^4.4.0
+        version: 4.4.0(vue@3.4.31)
     devDependencies:
       prettier:
         specifier: ^3.3.2
