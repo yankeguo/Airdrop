@@ -1,6 +1,11 @@
 <template>
   <div>
+    <Html>
+      <Head>
+        <Title>YGTOG Drop</Title>
+      </Head>
+    </Html>
     <NuxtRouteAnnouncer />
-    <NuxtWelcome />
+    <NuxtPage />
   </div>
 </template>
