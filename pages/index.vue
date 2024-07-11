@@ -66,6 +66,10 @@ async function disconnectGitHub() {
 const address = ref("");
 const addressConfirmed = ref(false);
 
+const blockscoutNFTLink = computed(() => {
+  return createGnosisBlockscoutAddressNFTLink(address.value);
+});
+
 const inputAddressDisabled = computed(() => {
   return !uiReady.value || addressConfirmed.value;
 });
@@ -226,6 +230,43 @@ async function connectWallet() {
           <span class="text-lg lg:text-xl">3. Claim Items</span>
         </template>
         <p></p>
+      </UCard>
+      <UCard
+        :ui="{
+          background: 'bg-white dark:bg-gray-900',
+          divide: 'divide-y divide-gray-200 dark:divide-gray-600',
+          ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
+          header: {
+            padding: 'p-1 px-2 sm:p-2 sm:px-4',
+            base: 'flex flex-row justify-start items-center',
+          },
+          body: {
+            padding: 'p-2 sm:p-4',
+            base: 'flex flex-row justify-start items-center',
+          },
+        }"
+        class="col-span-2"
+      >
+        <template #header>
+          <span class="text-lg lg:text-xl">4. Verify</span>
+        </template>
+        <template v-if="addressConfirmed">
+          <span> Check your NFTs on </span>
+          <UButton
+            class="ms-1"
+            color="lime"
+            variant="link"
+            size="xl"
+            :padded="false"
+            :to="blockscoutNFTLink"
+            target="_blank"
+            label="Blockscout (Gnosis)"
+          >
+          </UButton>
+        </template>
+        <p v-if="!addressConfirmed && uiReady" class="text-red-600">
+          Please input your Ethereum address to proceed.
+        </p>
       </UCard>
     </div>
   </UContainer>

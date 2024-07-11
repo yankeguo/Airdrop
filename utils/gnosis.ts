@@ -9,3 +9,7 @@ export const GNOSIS_MAINNET_PARAMS = {
   rpcUrls: ["https://rpc.gnosischain.com/"],
   blockExplorerUrls: ["https://gnosisscan.io/"],
 };
+
+export function createGnosisBlockscoutAddressNFTLink(address: string) {
+  return `https://gnosis.blockscout.com/address/${address}?tab=tokens_nfts`;
+}
