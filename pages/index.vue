@@ -142,7 +142,7 @@ async function connectWallet() {
         }"
       >
         <template #header>
-          <span class="text-lg lg:text-xl">1. Connect Account</span>
+          <span class="text-lg lg:text-xl">1. Connect Your Accounts</span>
         </template>
 
         <UButton
@@ -183,7 +183,9 @@ async function connectWallet() {
         }"
       >
         <template #header>
-          <span class="text-lg lg:text-xl">2. Input Address</span>
+          <span class="text-lg lg:text-xl"
+            >2. Set Beneficiary Ethereum Address</span
+          >
         </template>
         <UInput
           :disabled="inputAddressDisabled"
@@ -265,7 +267,7 @@ async function connectWallet() {
           </UButton>
         </template>
         <p v-if="!addressConfirmed && uiReady" class="text-red-600">
-          Please input your Ethereum address to proceed.
+          Please set your beneficiary ethereum address to proceed.
         </p>
       </UCard>
     </div>
