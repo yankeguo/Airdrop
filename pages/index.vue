@@ -5,37 +5,38 @@ const uiReady = ref(false);
 
 const address = ref("");
 
-const accountGitHubDisabled = ref(0);
-const accountGitHubLoading = ref(0);
+const fetchingAccountGitHub = ref(0);
+const updatingAccountGitHub = ref(0);
+
 const accountGitHubID = ref("");
 const accountGitHubUsername = ref("");
 
 const buttonGitHubDisabled = computed(() => {
   return (
     !uiReady.value ||
-    accountGitHubDisabled.value > 0 ||
-    accountGitHubLoading.value > 0
+    fetchingAccountGitHub.value > 0 ||
+    updatingAccountGitHub.value > 0
   );
 });
 
 const buttonGitHubLoading = computed(() => {
-  return accountGitHubLoading.value > 0;
+  return updatingAccountGitHub.value > 0;
 });
 
 async function fetchAccountGitHub() {
-  accountGitHubDisabled.value++;
+  fetchingAccountGitHub.value++;
   try {
     const { id, username }: { id: string; username: string } =
       await invokeAPI("/account/github");
     accountGitHubID.value = id;
     accountGitHubUsername.value = username;
   } finally {
-    accountGitHubDisabled.value--;
+    fetchingAccountGitHub.value--;
   }
 }
 
 async function connectGitHub() {
-  accountGitHubLoading.value++;
+  updatingAccountGitHub.value++;
   try {
     const { url }: { url: string } = await invokeAPI(
       "/account/github/authorize_url",
@@ -43,15 +44,16 @@ async function connectGitHub() {
         query: { host: location.host },
       },
     );
+    uiReady.value = false;
     navigateTo(url, { external: true });
   } finally {
-    accountGitHubLoading.value--;
+    updatingAccountGitHub.value--;
   }
 }
 
 async function disconnectGitHub() {
   if (!confirm("Confirm to disconnect GitHub account?")) return;
-  accountGitHubLoading.value++;
+  updatingAccountGitHub.value++;
   try {
     await invokeAPI("/account/github/sign_out", {
       method: "POST",
@@ -59,7 +61,7 @@ async function disconnectGitHub() {
     });
     await fetchAccountGitHub();
   } finally {
-    accountGitHubLoading.value--;
+    updatingAccountGitHub.value--;
   }
 }
 
