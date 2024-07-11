@@ -4,6 +4,7 @@
   >
     <span>Claim Your</span>
     <img src="~/assets/token-icon.svg" class="w-8 ms-2 me-1" />
-    <span class="text-lime-400">YGTOG</span><span class="ms-2">Airdrop</span>
+    <span class="text-lime-400">YGTOG</span
+    ><span class="ms-2">Airdrop from Yanke Guo</span>
   </div>
 </template>

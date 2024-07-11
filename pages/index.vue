@@ -85,43 +85,82 @@ async function connectWallet() {
 
 <template>
   <UContainer class="pt-6 lg:pt-8">
-    <IndexTitle class="mb-6"></IndexTitle>
+    <IndexTitle class="mb-6 lg:mb-8"></IndexTitle>
 
-    <IndexSectionTitle>
-      <span>1. Connect Account</span>
-    </IndexSectionTitle>
+    <div class="grid grid-cols-2 gap-4">
+      <UCard
+        :ui="{
+          background: 'bg-white dark:bg-gray-900',
+          divide: 'divide-y divide-gray-200 dark:divide-gray-600',
+          ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
+          header: {
+            padding: 'p-1 sm:p-2',
+            base: 'flex flex-row justify-center items-center',
+          },
+          body: { padding: 'p-2 sm:p-4' },
+        }"
+      >
+        <template #header>
+          <span class="text-lg lg:text-xl">1. Connect Account</span>
+        </template>
 
-    <IndexSectionContent class="mt-4">
-      <UButton
-        v-if="!accountGitHubID"
-        color="lime"
-        icon="i-simple-icons-github"
-        label="Connect GitHub"
-        :disabled="buttonGitHubDisabled"
-        :loading="buttonGitHubLoading"
-        @click="connectGitHub"
-      ></UButton>
-      <template v-if="accountGitHubID">
-        <span class="me-2">Connected as</span>
-        <UIcon name="i-simple-icons-github"></UIcon>
-        <span class="ms-2 font-semibold">{{ accountGitHubUsername }},</span>
         <UButton
-          class="ms-2"
-          color="red"
-          variant="link"
-          size="xl"
-          @click="disconnectGitHub"
-          :padded="false"
-          label="disconnect"
-        >
-        </UButton>
-      </template>
-    </IndexSectionContent>
-
-    <IndexSectionTitle class="mt-4">
-      <span>2. Setup Address</span>
-    </IndexSectionTitle>
-
-    <IndexSectionContent class="mt-4"> </IndexSectionContent>
+          v-if="!accountGitHubID"
+          color="lime"
+          icon="i-simple-icons-github"
+          label="Connect GitHub"
+          :disabled="buttonGitHubDisabled"
+          :loading="buttonGitHubLoading"
+          @click="connectGitHub"
+        ></UButton>
+        <template v-if="accountGitHubID">
+          <span class="me-2">Connected as</span>
+          <UIcon name="i-simple-icons-github"></UIcon>
+          <span class="ms-2 font-semibold">{{ accountGitHubUsername }},</span>
+          <UButton
+            class="ms-2"
+            color="red"
+            variant="link"
+            size="xl"
+            @click="disconnectGitHub"
+            :padded="false"
+            label="disconnect"
+          >
+          </UButton>
+        </template>
+      </UCard>
+      <UCard
+        :ui="{
+          background: 'bg-white dark:bg-gray-900',
+          divide: 'divide-y divide-gray-200 dark:divide-gray-600',
+          ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
+          header: {
+            padding: 'p-1 sm:p-2',
+            base: 'flex flex-row justify-center items-center',
+          },
+          body: { padding: 'p-2 sm:p-4' },
+        }"
+      >
+        <template #header>
+          <span class="text-lg lg:text-xl">2. Choose Address</span>
+        </template>
+        <span>Address</span>
+      </UCard>
+      <UCard
+        :ui="{
+          background: 'bg-white dark:bg-gray-900',
+          divide: 'divide-y divide-gray-200 dark:divide-gray-600',
+          ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
+          header: {
+            padding: 'p-1 sm:p-2',
+            base: 'flex flex-row justify-center items-center',
+          },
+          body: { padding: 'p-2 sm:p-4' },
+        }"
+        class="col-span-2"
+      >
+        <template #header> </template>
+      </UCard>
+    </div>
   </UContainer>
 </template>
