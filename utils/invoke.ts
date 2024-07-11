@@ -6,7 +6,7 @@ export async function invokeAPI<T>(
 ): Promise<T> {
   const toast = useToast();
   try {
-    return await $fetch<T>("https://drop-api.yankeguo.com" + path, {
+    return await $fetch<T>("https://airdrop-api.yankeguo.com" + path, {
       ...opts,
       credentials: "include",
     });
