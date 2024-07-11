@@ -142,7 +142,7 @@ async function connectWallet() {
         }"
       >
         <template #header>
-          <span class="text-lg lg:text-xl">1. Connect Your Accounts</span>
+          <span class="text-lg lg:text-xl">1. Connect Accounts</span>
         </template>
 
         <UButton
@@ -229,7 +229,7 @@ async function connectWallet() {
         class="col-span-2"
       >
         <template #header>
-          <span class="text-lg lg:text-xl">3. Claim Items</span>
+          <span class="text-lg lg:text-xl">3. Claim Airdrops</span>
         </template>
         <p></p>
       </UCard>
@@ -250,7 +250,7 @@ async function connectWallet() {
         class="col-span-2"
       >
         <template #header>
-          <span class="text-lg lg:text-xl">4. Verify</span>
+          <span class="text-lg lg:text-xl">4. Check Collected Items</span>
         </template>
         <template v-if="addressConfirmed">
           <span> Check your NFTs on </span>

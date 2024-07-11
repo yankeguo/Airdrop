@@ -2,7 +2,7 @@
   <div>
     <Html>
       <Head>
-        <Title>Airdrop by Yanke Guo</Title>
+        <Title>Airdrop from Yanke Guo</Title>
       </Head>
     </Html>
     <NuxtRouteAnnouncer />
