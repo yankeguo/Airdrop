@@ -124,7 +124,7 @@ async function connectWallet() {
   <UContainer class="pt-6 lg:pt-8">
     <IndexTitle class="mb-6 lg:mb-8"></IndexTitle>
 
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-2 gap-6">
       <UCard
         :ui="{
           background: 'bg-white dark:bg-gray-900',
@@ -215,14 +215,17 @@ async function connectWallet() {
           divide: 'divide-y divide-gray-200 dark:divide-gray-600',
           ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
           header: {
-            padding: 'p-1 sm:p-2',
-            base: 'flex flex-row justify-center items-center',
+            padding: 'p-1 px-2 sm:p-2 sm:px-4',
+            base: 'flex flex-row justify-start items-center',
           },
           body: { padding: 'p-2 sm:p-4' },
         }"
         class="col-span-2"
       >
-        <template #header> </template>
+        <template #header>
+          <span class="text-lg lg:text-xl">3. Claim Items</span>
+        </template>
+        <p></p>
       </UCard>
     </div>
   </UContainer>
