@@ -7,5 +7,6 @@
     </Html>
     <NuxtRouteAnnouncer />
     <NuxtPage />
+    <UNotifications />
   </div>
 </template>
