@@ -3,8 +3,6 @@ import { ethers } from "ethers";
 
 const uiReady = ref(false);
 
-const address = ref("");
-
 const fetchingAccountGitHub = ref(0);
 const updatingAccountGitHub = ref(0);
 
@@ -65,12 +63,51 @@ async function disconnectGitHub() {
   }
 }
 
-onMounted(async () => {
-  uiReady.value = true;
+const address = ref("");
+const addressConfirmed = ref(false);
 
+const inputAddressDisabled = computed(() => {
+  return !uiReady.value || addressConfirmed.value;
+});
+
+const buttonAddressConfirmDisabled = computed(() => {
+  return !uiReady.value || !address.value;
+});
+
+const buttonAddressClearDisabled = computed(() => {
+  return !uiReady.value;
+});
+
+function confirmAddress() {
+  if (ethers.isAddress(address.value)) {
+    addressConfirmed.value = true;
+    setCachedAddress(address.value);
+  } else {
+    const toast = useToast();
+    toast.add({
+      title: "Invalid Address",
+      description: "Please input a valid Ethereum address.",
+      color: "red",
+      timeout: 0,
+    });
+  }
+}
+
+function clearAddress() {
+  addressConfirmed.value = false;
+  setCachedAddress("");
+}
+
+onMounted(async () => {
   address.value = getCachedAddress() ?? "";
 
+  if (address.value) {
+    addressConfirmed.value = true;
+  }
+
   await fetchAccountGitHub();
+
+  uiReady.value = true;
 });
 
 async function connectWallet() {
@@ -138,13 +175,39 @@ async function connectWallet() {
             padding: 'p-1 sm:p-2',
             base: 'flex flex-row justify-center items-center',
           },
-          body: { padding: 'p-2 sm:p-4' },
+          body: { padding: 'p-2 sm:p-4', base: 'flex flex-row items-center' },
         }"
       >
         <template #header>
-          <span class="text-lg lg:text-xl">2. Choose Address</span>
+          <span class="text-lg lg:text-xl">2. Input Address</span>
         </template>
-        <span>Address</span>
+        <UInput
+          :disabled="inputAddressDisabled"
+          class="flex-grow me-2"
+          v-model="address"
+          placeholder="0xAaBbCcDdEe..."
+        >
+        </UInput>
+        <UButton
+          v-if="!addressConfirmed"
+          :disabled="buttonAddressConfirmDisabled"
+          size="sm"
+          icon="i-heroicons-check-circle"
+          @click="confirmAddress"
+          label="Confirm"
+        >
+        </UButton>
+        <UButton
+          v-if="addressConfirmed"
+          :disabled="buttonAddressClearDisabled"
+          size="sm"
+          variant="outline"
+          color="red"
+          icon="i-heroicons-x-circle"
+          @click="clearAddress"
+          label="Clear"
+        >
+        </UButton>
       </UCard>
       <UCard
         :ui="{
