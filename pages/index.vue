@@ -67,10 +67,6 @@ async function disconnectGitHub() {
 const address = ref("");
 const addressConfirmed = ref(false);
 
-const blockscoutNFTLink = computed(() => {
-  return createGnosisBlockscoutAddressNFTLink(address.value);
-});
-
 const inputAddressDisabled = computed(() => {
   return !uiReady.value || addressConfirmed.value;
 });
@@ -150,6 +146,10 @@ function createAirdropScanURL(item: Airdrop) {
     return `https://gnosis.blockscout.com/token/${item.contract}/instance/${item.token}`;
   }
   return "";
+}
+
+function createGnosisTxURL(tx: string) {
+  return `https://gnosis.blockscout.com/tx/${tx}`;
 }
 
 async function claimAirdrop(id: string) {
@@ -330,7 +330,15 @@ onMounted(async () => {
               </template>
             </UPopover>
             <template #footer>
-              <span v-if="item.is_minted" class="text-green-400">MINTED</span>
+              <UButton
+                v-if="item.is_minted"
+                color="lime"
+                :to="createGnosisTxURL(item.mint_tx!)"
+                label="MINTED"
+                target="_blank"
+                variant="link"
+              >
+              </UButton>
               <span v-else-if="item.is_claimed" class="text-green-400"
                 >CLAIMED, MINTING</span
               >
