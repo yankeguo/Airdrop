@@ -58,6 +58,7 @@ async function disconnectGitHub() {
       body: {},
     });
     await fetchAccountGitHub();
+    await fetchAirdrops();
   } finally {
     updatingAccountGitHub.value--;
   }
@@ -102,6 +103,46 @@ function clearAddress() {
   setCachedAddress("");
 }
 
+interface Airdrop {
+  id: string;
+  chain: string;
+  standard: string;
+  contract: string;
+  token: string;
+  name: string;
+  description: string;
+  helper: string;
+  image: string;
+  is_eligible: boolean;
+  eligible_at: number | null;
+  is_claimed: boolean;
+  claimed_at: number | null;
+  claim_address: string | null;
+  is_minted: boolean;
+  minted_at: number | null;
+  mint_tx: string | null;
+}
+
+const airdrops: Ref<Airdrop[]> = ref([]);
+
+const airdropsIsLoading = ref(0);
+
+async function fetchAirdrops() {
+  airdropsIsLoading.value++;
+  try {
+    airdrops.value = await invokeAPI("/airdrop/list");
+  } finally {
+    airdropsIsLoading.value--;
+  }
+}
+
+function createAirdropScanURL(item: Airdrop) {
+  if (item.chain === "gnosis") {
+    return `https://gnosis.blockscout.com/token/${item.contract}/instance/${item.token}`;
+  }
+  return "";
+}
+
 onMounted(async () => {
   address.value = getCachedAddress() ?? "";
 
@@ -109,19 +150,10 @@ onMounted(async () => {
     addressConfirmed.value = true;
   }
 
-  await fetchAccountGitHub();
+  await Promise.all([fetchAccountGitHub(), fetchAirdrops()]);
 
   uiReady.value = true;
 });
-
-async function connectWallet() {
-  await window.ethereum.request({
-    method: "wallet_addEthereumChain",
-    params: [GNOSIS_MAINNET_PARAMS],
-  });
-  const signer = await window.walletProvider.getSigner();
-  address.value = await signer.getAddress();
-}
 </script>
 
 <template>
@@ -230,8 +262,68 @@ async function connectWallet() {
       >
         <template #header>
           <span class="text-lg lg:text-xl">3. Claim Airdrops</span>
+          <span class="text-lg lg:text-xl font-bold text-red-400 ms-2"
+            >[THIS FEATURE IS STILL UNDERDEVELOPMENT, PLEASE WAIT]</span
+          >
         </template>
-        <p></p>
+        <div class="grid grid-cols-2 lg:grid-cols-6 gap-4">
+          <UCard
+            :ui="{
+              background: 'bg-white dark:bg-gray-900',
+              divide: 'divide-y divide-gray-200 dark:divide-gray-600',
+              ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
+              header: {
+                padding: 'p-1 px-2 sm:p-2 sm:px-4',
+                base: 'flex flex-row justify-start items-center',
+              },
+              footer: {
+                padding: 'p-1 px-2 sm:p-2 sm:px-4',
+                base: 'flex flex-row justify-center items-center',
+              },
+              body: {
+                padding: 'p-2 sm:p-4',
+                base: 'flex flex-col justify-start items-center',
+              },
+            }"
+            v-for="(item, idx) in airdrops"
+          >
+            <template #header>
+              <UButton
+                variant="link"
+                class="font-semibold"
+                :to="createAirdropScanURL(item)"
+                :label="item.name"
+                target="_blank"
+              >
+              </UButton>
+            </template>
+            <UPopover mode="hover">
+              <img class="w-full" :src="item.image" />
+              <template #panel>
+                <div class="w-64 p-4">
+                  <p>{{ item.description }}</p>
+                </div>
+              </template>
+            </UPopover>
+            <template #footer>
+              <span v-if="item.is_minted" class="text-green-400">MINTED</span>
+              <span v-else-if="item.is_claimed" class="text-green-400"
+                >CLAIMED</span
+              >
+              <span v-else-if="item.is_eligible" class="text-lime-400"
+                >ELIGIBLE</span
+              >
+              <UPopover v-else mode="hover">
+                <span class="text-amber-400">NOT ELIGIBLE</span>
+                <template #panel>
+                  <div class="w-64 p-4">
+                    <p>{{ item.helper }}</p>
+                  </div>
+                </template>
+              </UPopover>
+            </template>
+          </UCard>
+        </div>
       </UCard>
       <UCard
         :ui="{
