@@ -125,14 +125,23 @@ interface Airdrop {
 
 const airdrops: Ref<Airdrop[]> = ref([]);
 
-const airdropsIsLoading = ref(0);
+const fetchingAirdrop = ref(0);
+const updatingAirdrop = ref(0);
+
+const claimButtonDisabled = computed(() => {
+  return !addressConfirmed.value || updatingAirdrop.value > 0;
+});
+
+const claimButtonLoading = computed(() => {
+  return updatingAirdrop.value > 0;
+});
 
 async function fetchAirdrops() {
-  airdropsIsLoading.value++;
+  fetchingAirdrop.value++;
   try {
     airdrops.value = await invokeAPI("/airdrop/list");
   } finally {
-    airdropsIsLoading.value--;
+    fetchingAirdrop.value--;
   }
 }
 
@@ -141,6 +150,20 @@ function createAirdropScanURL(item: Airdrop) {
     return `https://gnosis.blockscout.com/token/${item.contract}/instance/${item.token}`;
   }
   return "";
+}
+
+async function claimAirdrop(id: string) {
+  if (!confirm(`confirm to claim airdrop ${id} to ${address.value}?`)) return;
+  updatingAirdrop.value++;
+  try {
+    await invokeAPI("/airdrop/claim", {
+      method: "POST",
+      body: { nft_id: id, address: address.value },
+    });
+    await fetchAirdrops();
+  } finally {
+    updatingAirdrop.value--;
+  }
 }
 
 onMounted(async () => {
@@ -263,7 +286,8 @@ onMounted(async () => {
         <template #header>
           <span class="text-lg lg:text-xl">3. Claim Airdrops</span>
           <span class="text-lg lg:text-xl font-bold text-red-400 ms-2"
-            >[THIS FEATURE IS STILL UNDERDEVELOPMENT, PLEASE WAIT]</span
+            >[THIS FEATURE IS STILL UNDERDEVELOPMENT, PLEASE WAIT FOR
+            MINTED]</span
           >
         </template>
         <div class="grid grid-cols-2 lg:grid-cols-6 gap-4">
@@ -308,11 +332,18 @@ onMounted(async () => {
             <template #footer>
               <span v-if="item.is_minted" class="text-green-400">MINTED</span>
               <span v-else-if="item.is_claimed" class="text-green-400"
-                >CLAIMED</span
+                >CLAIMED, MINTING</span
               >
-              <span v-else-if="item.is_eligible" class="text-lime-400"
-                >ELIGIBLE</span
+              <UButton
+                v-else-if="item.is_eligible"
+                color="lime"
+                label="Claim"
+                block
+                :disabled="claimButtonDisabled"
+                :loading="claimButtonLoading"
+                @click="claimAirdrop(item.id)"
               >
+              </UButton>
               <UPopover v-else mode="hover">
                 <span class="text-amber-400">NOT ELIGIBLE</span>
                 <template #panel>
