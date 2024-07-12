@@ -323,7 +323,7 @@ onMounted(async () => {
             <UPopover mode="hover">
               <img class="w-full" :src="item.image" />
               <template #panel>
-                <div class="w-64 p-4">
+                <div class="w-64 p-4 prose-sm dark:prose-invert">
                   <p>{{ item.description }}</p>
                 </div>
               </template>
@@ -362,7 +362,10 @@ onMounted(async () => {
                   ></UIcon>
                 </div>
                 <template #panel>
-                  <div class="w-64 p-4" v-html="item.helper"></div>
+                  <div
+                    class="w-64 p-4 prose-sm dark:prose-invert"
+                    v-html="item.helper"
+                  ></div>
                 </template>
               </UPopover>
             </template>
