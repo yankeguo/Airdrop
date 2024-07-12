@@ -1,18 +1,11 @@
-import { ethers } from "ethers";
-
-declare global {
-  interface Window {
-    ethereum: any;
-    walletProvider: ethers.BrowserProvider;
-  }
-}
+import { isAddress } from "web3-validator";
 
 export function getCachedAddress(): string | null {
   const localAddress = localStorage.getItem("address");
   if (
     localAddress &&
     typeof localAddress === "string" &&
-    ethers.isAddress(localAddress)
+    isAddress(localAddress)
   ) {
     return localAddress;
   }

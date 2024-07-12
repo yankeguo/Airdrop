@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ethers } from "ethers";
+import { isAddress } from "web3-validator";
 
 const uiReady = ref(false);
 
@@ -80,7 +80,7 @@ const buttonAddressClearDisabled = computed(() => {
 });
 
 function confirmAddress() {
-  if (ethers.isAddress(address.value)) {
+  if (isAddress(address.value)) {
     addressConfirmed.value = true;
     setCachedAddress(address.value);
   } else {
@@ -285,10 +285,6 @@ onMounted(async () => {
       >
         <template #header>
           <span class="text-lg lg:text-xl">3. Claim Airdrops</span>
-          <span class="text-lg lg:text-xl font-bold text-red-400 ms-2"
-            >[THIS FEATURE IS STILL UNDERDEVELOPMENT, PLEASE WAIT FOR
-            MINTED]</span
-          >
         </template>
         <div class="grid grid-cols-2 lg:grid-cols-6 gap-4">
           <UCard
@@ -314,6 +310,7 @@ onMounted(async () => {
             <template #header>
               <UButton
                 variant="link"
+                color="lime"
                 class="font-semibold"
                 :to="createAirdropScanURL(item)"
                 :label="item.name"
@@ -364,6 +361,13 @@ onMounted(async () => {
           </UCard>
         </div>
       </UCard>
+    </div>
+    <div class="flex flex-row items-center justify-between mt-6 text-slate-400">
+      <div>
+        If you encounter any issues, please contact me via
+        <a href="mailto:hi@yankeguo.com">hi@yankeguo.com</a>
+      </div>
+      <div>Copyright © 2024, Yanke Guo, All Rights Reserved.</div>
     </div>
   </UContainer>
 </template>
