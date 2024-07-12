@@ -352,11 +352,17 @@ onMounted(async () => {
               >
               </UButton>
               <UPopover v-else mode="hover">
-                <span class="text-amber-400">NOT ELIGIBLE</span>
+                <div
+                  class="flex flex-row items-center justify-center text-amber-400"
+                >
+                  <span>NOT ELIGIBLE</span>
+                  <UIcon
+                    class="ms-1"
+                    name="i-heroicons-question-mark-circle"
+                  ></UIcon>
+                </div>
                 <template #panel>
-                  <div class="w-64 p-4">
-                    <p>{{ item.helper }}</p>
-                  </div>
+                  <div class="w-64 p-4" v-html="item.helper"></div>
                 </template>
               </UPopover>
             </template>
