@@ -180,130 +180,130 @@ onMounted(async () => {
 </script>
 
 <template>
-  <UContainer class="pt-6 lg:pt-8">
-    <IndexTitle class="mb-6 lg:mb-8"></IndexTitle>
+  <UContainer class="py-6 lg:py-8">
+    <IndexTitle class="mb-4 lg:mb-6"></IndexTitle>
 
-    <div class="grid grid-cols-2 gap-6">
-      <UCard
-        :ui="{
-          background: 'bg-white dark:bg-gray-900',
-          divide: 'divide-y divide-gray-200 dark:divide-gray-600',
-          ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
-          header: {
-            padding: 'p-1 px-2 sm:p-2 sm:px-4',
-            base: 'flex flex-row justify-start items-center',
-          },
-          body: { padding: 'p-2 sm:p-4' },
-        }"
-      >
-        <template #header>
-          <span class="text-lg lg:text-xl font-semibold"
-            >1. Connect Accounts</span
-          >
-        </template>
+    <div class="flex flex-col gap-4 md:gap-6">
+      <div class="grid grid-col-1 md:grid-cols-2 gap-4 md:gap-6">
+        <UCard
+          :ui="{
+            background: 'bg-white dark:bg-gray-900',
+            divide: 'divide-y divide-gray-200 dark:divide-gray-600',
+            ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
+            header: {
+              padding: 'p-2',
+              base: 'flex flex-row justify-start items-center',
+            },
+            body: { padding: 'p-2' },
+          }"
+        >
+          <template #header>
+            <span class="font-semibold">1. Connect Accounts</span>
+          </template>
 
-        <UButton
-          v-if="!accountGitHubID"
-          color="lime"
-          icon="i-simple-icons-github"
-          label="Connect GitHub"
-          :disabled="buttonGitHubDisabled"
-          :loading="buttonGitHubLoading"
-          @click="connectGitHub"
-        ></UButton>
-        <template v-if="accountGitHubID">
-          <span class="me-2">Connected as</span>
-          <UIcon name="i-simple-icons-github"></UIcon>
-          <span class="ms-2 font-semibold">{{ accountGitHubUsername }},</span>
           <UButton
-            class="ms-2"
-            color="red"
-            variant="link"
-            size="xl"
-            @click="disconnectGitHub"
-            :padded="false"
-            label="disconnect"
+            v-if="!accountGitHubID"
+            color="lime"
+            icon="i-simple-icons-github"
+            label="Connect GitHub"
+            :disabled="buttonGitHubDisabled"
+            :loading="buttonGitHubLoading"
+            @click="connectGitHub"
+          ></UButton>
+          <template v-if="accountGitHubID">
+            <span class="me-2">Connected as</span>
+            <UIcon name="i-simple-icons-github"></UIcon>
+            <span class="ms-2 font-semibold">{{ accountGitHubUsername }},</span>
+            <UButton
+              class="ms-2"
+              color="red"
+              variant="link"
+              size="xl"
+              @click="disconnectGitHub"
+              :padded="false"
+              label="disconnect"
+            >
+            </UButton>
+          </template>
+        </UCard>
+        <UCard
+          :ui="{
+            background: 'bg-white dark:bg-gray-900',
+            divide: 'divide-y divide-gray-200 dark:divide-gray-600',
+            ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
+            header: {
+              padding: 'p-2',
+              base: 'flex flex-row justify-start items-center',
+            },
+            body: { padding: 'p-2', base: 'flex flex-row items-center' },
+          }"
+        >
+          <template #header>
+            <span class="font-semibold">2. Set Ethereum Address</span>
+          </template>
+          <UInput
+            :disabled="inputAddressDisabled"
+            class="flex-grow me-2"
+            v-model="address"
+            placeholder="0xAaBbCcDdEe..."
+          >
+          </UInput>
+          <UButton
+            v-if="!addressConfirmed"
+            :disabled="buttonAddressConfirmDisabled"
+            size="sm"
+            icon="i-heroicons-check-circle"
+            @click="confirmAddress"
+            label="Confirm"
           >
           </UButton>
-        </template>
-      </UCard>
-      <UCard
-        :ui="{
-          background: 'bg-white dark:bg-gray-900',
-          divide: 'divide-y divide-gray-200 dark:divide-gray-600',
-          ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
-          header: {
-            padding: 'p-1 px-2 sm:p-2 sm:px-4',
-            base: 'flex flex-row justify-start items-center',
-          },
-          body: { padding: 'p-2 sm:p-4', base: 'flex flex-row items-center' },
-        }"
-      >
-        <template #header>
-          <span class="text-lg lg:text-xl font-semibold"
-            >2. Set Beneficiary Ethereum Address</span
+          <UButton
+            v-if="addressConfirmed"
+            :disabled="buttonAddressClearDisabled"
+            size="sm"
+            variant="outline"
+            color="red"
+            icon="i-heroicons-x-circle"
+            @click="clearAddress"
+            label="Clear"
           >
-        </template>
-        <UInput
-          :disabled="inputAddressDisabled"
-          class="flex-grow me-2"
-          v-model="address"
-          placeholder="0xAaBbCcDdEe..."
-        >
-        </UInput>
-        <UButton
-          v-if="!addressConfirmed"
-          :disabled="buttonAddressConfirmDisabled"
-          size="sm"
-          icon="i-heroicons-check-circle"
-          @click="confirmAddress"
-          label="Confirm"
-        >
-        </UButton>
-        <UButton
-          v-if="addressConfirmed"
-          :disabled="buttonAddressClearDisabled"
-          size="sm"
-          variant="outline"
-          color="red"
-          icon="i-heroicons-x-circle"
-          @click="clearAddress"
-          label="Clear"
-        >
-        </UButton>
-      </UCard>
+          </UButton>
+        </UCard>
+      </div>
       <UCard
         :ui="{
           background: 'bg-white dark:bg-gray-900',
           divide: 'divide-y divide-gray-200 dark:divide-gray-600',
           ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
           header: {
-            padding: 'p-1 px-2 sm:p-2 sm:px-4',
+            padding: 'p-2',
             base: 'flex flex-row justify-start items-center',
           },
-          body: { padding: 'p-2 sm:p-4' },
+          body: { padding: 'p-2' },
         }"
         class="col-span-2"
       >
         <template #header>
-          <span class="text-lg lg:text-xl font-semibold">3. Claim Items</span>
+          <span class="font-semibold">3. Claim Items</span>
         </template>
-        <div class="grid grid-cols-2 lg:grid-cols-6 gap-4">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6"
+        >
           <UCard
             :ui="{
               background: 'bg-white dark:bg-gray-900',
               divide: 'divide-y divide-gray-200 dark:divide-gray-600',
               ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
               header: {
-                padding: 'p-1 px-2 sm:p-2 sm:px-4',
-                base: 'flex flex-row justify-start items-center',
+                padding: 'p-1 px-2',
+                base: 'flex flex-row justify-center items-center',
               },
               footer: {
-                padding: 'p-1 px-2 sm:p-2 sm:px-4',
+                padding: 'p-1 px-2',
                 base: 'flex flex-row justify-center items-center',
               },
               body: {
-                padding: 'p-2 sm:p-4',
+                padding: 'p-2',
                 base: 'flex flex-col justify-start items-center',
               },
             }"
@@ -317,6 +317,7 @@ onMounted(async () => {
                 :to="createAirdropScanURL(item)"
                 :label="item.name"
                 target="_blank"
+                :padded="false"
               >
               </UButton>
             </template>
@@ -372,13 +373,15 @@ onMounted(async () => {
           </UCard>
         </div>
       </UCard>
-    </div>
-    <div class="flex flex-row items-center justify-between mt-6 text-slate-400">
-      <div>
-        If you encounter any issues, please contact me via
-        <a href="mailto:hi@yankeguo.com">hi@yankeguo.com</a>
+      <div
+        class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 justify-between text-slate-400"
+      >
+        <div>
+          If you encounter any issues, please contact me via
+          <a href="mailto:hi@yankeguo.com">hi@yankeguo.com</a>
+        </div>
+        <div>Copyright © 2024, Yanke Guo, All Rights Reserved.</div>
       </div>
-      <div>Copyright © 2024, Yanke Guo, All Rights Reserved.</div>
     </div>
   </UContainer>
 </template>
