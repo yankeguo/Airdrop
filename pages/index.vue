@@ -190,14 +190,16 @@ onMounted(async () => {
           divide: 'divide-y divide-gray-200 dark:divide-gray-600',
           ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
           header: {
-            padding: 'p-1 sm:p-2',
-            base: 'flex flex-row justify-center items-center',
+            padding: 'p-1 px-2 sm:p-2 sm:px-4',
+            base: 'flex flex-row justify-start items-center',
           },
           body: { padding: 'p-2 sm:p-4' },
         }"
       >
         <template #header>
-          <span class="text-lg lg:text-xl">1. Connect Accounts</span>
+          <span class="text-lg lg:text-xl font-semibold"
+            >1. Connect Accounts</span
+          >
         </template>
 
         <UButton
@@ -231,14 +233,14 @@ onMounted(async () => {
           divide: 'divide-y divide-gray-200 dark:divide-gray-600',
           ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
           header: {
-            padding: 'p-1 sm:p-2',
-            base: 'flex flex-row justify-center items-center',
+            padding: 'p-1 px-2 sm:p-2 sm:px-4',
+            base: 'flex flex-row justify-start items-center',
           },
           body: { padding: 'p-2 sm:p-4', base: 'flex flex-row items-center' },
         }"
       >
         <template #header>
-          <span class="text-lg lg:text-xl"
+          <span class="text-lg lg:text-xl font-semibold"
             >2. Set Beneficiary Ethereum Address</span
           >
         </template>
@@ -284,7 +286,7 @@ onMounted(async () => {
         class="col-span-2"
       >
         <template #header>
-          <span class="text-lg lg:text-xl">3. Claim Airdrops</span>
+          <span class="text-lg lg:text-xl font-semibold">3. Claim Items</span>
         </template>
         <div class="grid grid-cols-2 lg:grid-cols-6 gap-4">
           <UCard
