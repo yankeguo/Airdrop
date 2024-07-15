@@ -314,6 +314,7 @@ onMounted(async () => {
                 variant="link"
                 color="lime"
                 class="font-semibold"
+                size="xl"
                 :to="createAirdropScanURL(item)"
                 :label="item.name"
                 target="_blank"
