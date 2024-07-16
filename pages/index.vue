@@ -3,6 +3,67 @@ import { isAddress } from "web3-validator";
 
 const uiReady = ref(false);
 
+const fetchingAccountTwitter = ref(0);
+const updatingAccountTwitter = ref(0);
+
+const accountTwitterID = ref("");
+const accountTwitterUsername = ref("");
+
+const buttonTwitterDisabled = computed(() => {
+  return (
+    !uiReady.value ||
+    fetchingAccountTwitter.value > 0 ||
+    updatingAccountTwitter.value > 0
+  );
+});
+
+const buttonTwitterLoading = computed(() => {
+  return updatingAccountTwitter.value > 0;
+});
+
+async function fetchAccountTwitter() {
+  fetchingAccountTwitter.value++;
+  try {
+    const { id, username }: { id: string; username: string } =
+      await invokeAPI("/account/twitter");
+    accountTwitterID.value = id;
+    accountTwitterUsername.value = username;
+  } finally {
+    fetchingAccountTwitter.value--;
+  }
+}
+
+async function connectTwitter() {
+  updatingAccountTwitter.value++;
+  try {
+    const { url }: { url: string } = await invokeAPI(
+      "/account/twitter/authorize_url",
+      {
+        query: { host: location.host },
+      },
+    );
+    uiReady.value = false;
+    navigateTo(url, { external: true });
+  } finally {
+    updatingAccountTwitter.value--;
+  }
+}
+
+async function disconnectTwitter() {
+  if (!confirm("Confirm to disconnect X (Twitter) account?")) return;
+  updatingAccountTwitter.value++;
+  try {
+    await invokeAPI("/account/twitter/sign_out", {
+      method: "POST",
+      body: {},
+    });
+    await fetchAccountTwitter();
+    await fetchAirdrops();
+  } finally {
+    updatingAccountTwitter.value--;
+  }
+}
+
 const fetchingAccountGitHub = ref(0);
 const updatingAccountGitHub = ref(0);
 
@@ -173,7 +234,11 @@ onMounted(async () => {
     addressConfirmed.value = true;
   }
 
-  await Promise.all([fetchAccountGitHub(), fetchAirdrops()]);
+  await Promise.all([
+    fetchAccountGitHub(),
+    fetchAccountTwitter(),
+    fetchAirdrops(),
+  ]);
 
   uiReady.value = true;
 });
@@ -194,7 +259,7 @@ onMounted(async () => {
               padding: 'p-2',
               base: 'flex flex-row justify-start items-center',
             },
-            body: { padding: 'p-2' },
+            body: { padding: 'p-3', base: 'flex flex-col gap-4' },
           }"
         >
           <template #header>
@@ -203,19 +268,25 @@ onMounted(async () => {
 
           <UButton
             v-if="!accountGitHubID"
+            class="underline"
+            variant="link"
             color="lime"
             icon="i-simple-icons-github"
             label="Connect GitHub"
             :disabled="buttonGitHubDisabled"
             :loading="buttonGitHubLoading"
             @click="connectGitHub"
-          ></UButton>
-          <template v-if="accountGitHubID">
-            <span class="me-2">Connected as</span>
+            :padded="false"
+          >
+          </UButton>
+          <div class="flex flex-row items-center" v-if="accountGitHubID">
             <UIcon name="i-simple-icons-github"></UIcon>
-            <span class="ms-2 font-semibold">{{ accountGitHubUsername }},</span>
+            <span class="ms-2">Connected as</span>
+            <span class="ms-1 font-semibold"
+              >@{{ accountGitHubUsername }},</span
+            >
             <UButton
-              class="ms-2"
+              class="ms-2 underline"
               color="red"
               variant="link"
               size="xl"
@@ -224,7 +295,38 @@ onMounted(async () => {
               label="disconnect"
             >
             </UButton>
-          </template>
+          </div>
+
+          <UButton
+            v-if="!accountTwitterID"
+            class="underline"
+            variant="link"
+            color="lime"
+            icon="i-simple-icons-x"
+            label="Connect Twitter"
+            :disabled="buttonTwitterDisabled"
+            :loading="buttonTwitterLoading"
+            @click="connectTwitter"
+            :padded="false"
+          >
+          </UButton>
+          <div class="flex flex-row items-center" v-if="accountTwitterID">
+            <UIcon name="i-simple-icons-x"></UIcon>
+            <span class="ms-2">Connected as</span>
+            <span class="ms-1 font-semibold"
+              >@{{ accountTwitterUsername }},</span
+            >
+            <UButton
+              class="ms-2 underline"
+              color="red"
+              variant="link"
+              size="xl"
+              @click="disconnectTwitter"
+              :padded="false"
+              label="disconnect"
+            >
+            </UButton>
+          </div>
         </UCard>
         <UCard
           :ui="{
@@ -235,7 +337,7 @@ onMounted(async () => {
               padding: 'p-2',
               base: 'flex flex-row justify-start items-center',
             },
-            body: { padding: 'p-2', base: 'flex flex-row items-center' },
+            body: { padding: 'p-3', base: 'flex flex-row items-center' },
           }"
         >
           <template #header>
@@ -279,7 +381,7 @@ onMounted(async () => {
             padding: 'p-2',
             base: 'flex flex-row justify-start items-center',
           },
-          body: { padding: 'p-2' },
+          body: { padding: 'p-3' },
         }"
         class="col-span-2"
       >
