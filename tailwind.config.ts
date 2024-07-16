@@ -7,7 +7,7 @@ export default <Partial<Config>>{
     fontFamily: {
       sans: [
         "ui-sans-serif",
-        '"Titillium Web"',
+        '"DM Sans"',
         "system-ui",
         "sans-serif",
         '"Apple Color Emoji"',
@@ -17,6 +17,7 @@ export default <Partial<Config>>{
       ],
       serif: [
         "ui-serif",
+        '"DM Serif Display"',
         "Georgia",
         "Cambria",
         '"Times New Roman"',

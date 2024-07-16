@@ -397,11 +397,11 @@ onMounted(async () => {
               divide: 'divide-y divide-gray-200 dark:divide-gray-600',
               ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
               header: {
-                padding: 'p-1 px-2',
+                padding: 'p-2 ',
                 base: 'flex flex-row justify-center items-center',
               },
               footer: {
-                padding: 'p-1 px-2',
+                padding: 'p-2',
                 base: 'flex flex-row justify-center items-center',
               },
               body: {
@@ -457,7 +457,7 @@ onMounted(async () => {
               </UButton>
               <UPopover v-else mode="hover">
                 <div
-                  class="flex flex-row items-center justify-center text-amber-400"
+                  class="flex flex-row items-center justify-center text-amber-400 pt-1"
                 >
                   <span>NOT ELIGIBLE</span>
                   <UIcon
