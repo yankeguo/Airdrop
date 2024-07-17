@@ -437,6 +437,7 @@ onMounted(async () => {
                 v-if="item.is_minted"
                 color="lime"
                 :to="createGnosisTxURL(item.mint_tx!)"
+                icon="i-heroicons-check-badge"
                 label="MINTED"
                 target="_blank"
                 variant="link"
