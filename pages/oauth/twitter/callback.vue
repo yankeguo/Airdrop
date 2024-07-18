@@ -25,8 +25,9 @@ onMounted(async () => {
 
 <template>
   <div
-    class="w-screen h-screen flex flex-row justify-center items-center font-semibold text-lg lg:text-xl"
+    class="w-screen h-screen flex flex-col justify-center items-center font-semibold text-lg lg:text-xl"
   >
-    <span>Please wait while we are redirecting you back...</span>
+    <span>Please wait</span>
+    <span>while we are redirecting you back...</span>
   </div>
 </template>
