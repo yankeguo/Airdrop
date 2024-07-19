@@ -246,103 +246,92 @@ onMounted(async () => {
 
 <template>
   <UContainer class="py-6 lg:py-8">
-    <IndexTitle class="mb-4 lg:mb-6"></IndexTitle>
+    <IndexHeader class="mb-6 lg:mb-8"></IndexHeader>
 
-    <div class="flex flex-col gap-4 md:gap-6">
-      <div class="grid grid-col-1 md:grid-cols-2 gap-4 md:gap-6">
-        <UCard
-          :ui="{
-            background: 'bg-white dark:bg-gray-900',
-            divide: 'divide-y divide-gray-200 dark:divide-gray-600',
-            ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
-            header: {
-              padding: 'p-2',
-              base: 'flex flex-row justify-start items-center',
-            },
-            body: { padding: 'p-3', base: 'flex flex-col gap-4' },
-          }"
-        >
-          <template #header>
-            <span class="font-semibold">1. Connect Accounts</span>
-          </template>
-
+    <div class="grid grid-cols-2 gap-6 md:gap-8">
+      <!-- Connect -->
+      <div class="col-span-2 md:col-span-1 flex flex-col gap-6">
+        <IndexTitle
+          icon="i-heroicons-link"
+          label="Connect Accounts"
+        ></IndexTitle>
+        <div class="grid grid-cols-2 gap-4">
+          <UButtonGroup
+            class="w-full"
+            v-if="accountGitHubID"
+            size="sm"
+            orientation="horizontal"
+          >
+            <UButton
+              class="flex-grow justify-center"
+              icon="i-simple-icons-github"
+              :label="accountGitHubUsername"
+              color="white"
+            />
+            <UButton
+              variant="outline"
+              size="sm"
+              icon="i-heroicons-link-slash"
+              color="red"
+              @click="disconnectGitHub"
+            />
+          </UButtonGroup>
           <UButton
-            v-if="!accountGitHubID"
-            class="underline"
-            variant="link"
+            v-else
+            variant="outline"
             color="lime"
             icon="i-simple-icons-github"
-            label="Connect GitHub"
+            label="GitHub"
+            size="sm"
+            :block="true"
             :disabled="buttonGitHubDisabled"
             :loading="buttonGitHubLoading"
             @click="connectGitHub"
-            :padded="false"
           >
           </UButton>
-          <div class="flex flex-row items-center" v-if="accountGitHubID">
-            <UIcon name="i-simple-icons-github"></UIcon>
-            <span class="ms-2">Connected as</span>
-            <span class="ms-1 font-semibold"
-              >@{{ accountGitHubUsername }},</span
-            >
-            <UButton
-              class="ms-2 underline"
-              color="red"
-              variant="link"
-              size="xl"
-              @click="disconnectGitHub"
-              :padded="false"
-              label="disconnect"
-            >
-            </UButton>
-          </div>
 
+          <UButtonGroup
+            v-if="accountTwitterID"
+            size="sm"
+            orientation="horizontal"
+          >
+            <UButton
+              class="flex-grow justify-center"
+              icon="i-simple-icons-x"
+              :label="accountTwitterUsername"
+              color="white"
+            />
+            <UButton
+              variant="outline"
+              size="sm"
+              icon="i-heroicons-link-slash"
+              color="red"
+              @click="disconnectTwitter"
+            />
+          </UButtonGroup>
           <UButton
-            v-if="!accountTwitterID"
-            class="underline"
-            variant="link"
+            v-else
+            variant="outline"
             color="lime"
             icon="i-simple-icons-x"
-            label="Connect Twitter"
+            label="Twitter"
+            size="sm"
+            :block="true"
             :disabled="buttonTwitterDisabled"
             :loading="buttonTwitterLoading"
             @click="connectTwitter"
-            :padded="false"
           >
           </UButton>
-          <div class="flex flex-row items-center" v-if="accountTwitterID">
-            <UIcon name="i-simple-icons-x"></UIcon>
-            <span class="ms-2">Connected as</span>
-            <span class="ms-1 font-semibold"
-              >@{{ accountTwitterUsername }},</span
-            >
-            <UButton
-              class="ms-2 underline"
-              color="red"
-              variant="link"
-              size="xl"
-              @click="disconnectTwitter"
-              :padded="false"
-              label="disconnect"
-            >
-            </UButton>
-          </div>
-        </UCard>
-        <UCard
-          :ui="{
-            background: 'bg-white dark:bg-gray-900',
-            divide: 'divide-y divide-gray-200 dark:divide-gray-600',
-            ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
-            header: {
-              padding: 'p-2',
-              base: 'flex flex-row justify-start items-center',
-            },
-            body: { padding: 'p-3', base: 'flex flex-row items-center' },
-          }"
-        >
-          <template #header>
-            <span class="font-semibold">2. Set Ethereum Address</span>
-          </template>
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="col-span-2 md:col-span-1 flex flex-col gap-6">
+        <IndexTitle
+          icon="i-heroicons-wallet"
+          label="Set Ethereum Address"
+        ></IndexTitle>
+        <div class="flex flex-row gap-4">
           <UInput
             :disabled="inputAddressDisabled"
             class="flex-grow me-2"
@@ -370,30 +359,22 @@ onMounted(async () => {
             label="Clear"
           >
           </UButton>
-        </UCard>
+        </div>
       </div>
-      <UCard
-        :ui="{
-          background: 'bg-white dark:bg-gray-900',
-          divide: 'divide-y divide-gray-200 dark:divide-gray-600',
-          ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
-          header: {
-            padding: 'p-2',
-            base: 'flex flex-row justify-start items-center',
-          },
-          body: { padding: 'p-3' },
-        }"
-        class="col-span-2"
-      >
-        <template #header>
-          <span class="font-semibold">3. Claim Items</span>
-        </template>
+
+      <!-- Claim -->
+      <div class="col-span-2 flex flex-col gap-6 md:gap-8">
+        <IndexTitle
+          icon="i-heroicons-archive-box-arrow-down"
+          label="Claim Items"
+        ></IndexTitle>
+
         <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6"
         >
           <UCard
             :ui="{
-              background: 'bg-white dark:bg-gray-900',
+              background: '',
               divide: 'divide-y divide-gray-200 dark:divide-gray-600',
               ring: 'ring-1 ring-gray-200 dark:ring-gray-600',
               header: {
@@ -458,7 +439,7 @@ onMounted(async () => {
               </UButton>
               <UPopover v-else mode="hover">
                 <div
-                  class="flex flex-row items-center justify-center text-amber-400 pt-1"
+                  class="flex flex-row items-center justify-center pt-1 text-amber-400"
                 >
                   <span>NOT ELIGIBLE</span>
                   <UIcon
@@ -476,16 +457,8 @@ onMounted(async () => {
             </template>
           </UCard>
         </div>
-      </UCard>
-      <div
-        class="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 justify-between text-slate-400"
-      >
-        <div>
-          If you encounter any issues, please contact me via
-          <a href="mailto:hi@yankeguo.com">hi@yankeguo.com</a>
-        </div>
-        <div>Copyright © 2024, Yanke Guo, All Rights Reserved.</div>
       </div>
     </div>
+    <IndexFooter class="mt-8 md:mt-12"></IndexFooter>
   </UContainer>
 </template>
