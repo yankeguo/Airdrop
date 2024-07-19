@@ -248,9 +248,9 @@ onMounted(async () => {
   <UContainer class="py-6 lg:py-8">
     <IndexHeader class="mb-6 lg:mb-8"></IndexHeader>
 
-    <div class="grid grid-cols-2 gap-6 md:gap-8">
+    <div class="flex flex-col gap-6 md:gap-8">
       <!-- Connect -->
-      <div class="col-span-2 md:col-span-1 flex flex-col gap-6">
+      <div class="md:w-1/2 flex flex-col gap-4 md:gap-6">
         <IndexTitle
           icon="i-heroicons-link"
           label="Connect Accounts"
@@ -326,7 +326,7 @@ onMounted(async () => {
       </div>
 
       <!-- Address -->
-      <div class="col-span-2 md:col-span-1 flex flex-col gap-6">
+      <div class="md:w-1/2 flex flex-col gap-4 md:gap-6">
         <IndexTitle
           icon="i-heroicons-wallet"
           label="Set Ethereum Address"
@@ -363,7 +363,7 @@ onMounted(async () => {
       </div>
 
       <!-- Claim -->
-      <div class="col-span-2 flex flex-col gap-6 md:gap-8">
+      <div class="flex flex-col gap-4 md:gap-6">
         <IndexTitle
           icon="i-heroicons-archive-box-arrow-down"
           label="Claim Items"
